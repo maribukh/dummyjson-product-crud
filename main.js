@@ -72,16 +72,8 @@ function clearForm() {
 
 function getFormData() {
   let inputs = document.querySelectorAll(".input-container input");
-  let [
-    title,
-    description,
-    category,
-    price,
-    discount,
-    rating,
-    stock,
-    imageUrl,
-  ] = [...inputs].map((i) => i.value);
+  let [title, description, category, price, discount, rating, stock, imageUrl] =
+    [...inputs].map((i) => i.value);
 
   return {
     title,
@@ -91,7 +83,7 @@ function getFormData() {
     discountPercentage: parseFloat(discount),
     rating: parseFloat(rating),
     stock: parseInt(stock),
-    imageUrl,
+    imageUrl: imageUrl.trim(), 
   };
 }
 
