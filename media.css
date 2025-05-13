@@ -1,43 +1,50 @@
-@media only screen and (max-width: 1480px) {
-    body .container {
-        width: 90%;
-    }
+@media only screen and (max-width: 1320px) {
+  body .container {
+    width: 90%;
+  }
 
-    body .container .products .product {
-        width: 32%;
-    }
+  body .container .products .product {
+    width: 32%;
+  }
+
+  body .container .addForm button {
+    width: fit-content;
+  }
 }
 
 @media only screen and (max-width: 890px) {
-    body .container {
-        width: 98%;
-    }
+  body .container {
+    width: 98%;
+  }
 
-    body .container .add-product .input-container {
-        width: 100%;
-    }
+  body .container .add-product .input-container {
+    width: 100%;
+  }
 
-    body .container .products .product {
-        width: 48.8%;
-    }
+  body .container .form-overlay .add-product {
+    width: 90%;
+  }
 
+  body .container .products .product {
+    width: 48.8%;
+  }
 }
 
 @media only screen and (max-width: 678px) {
-    body .container {
-        margin: 1rem auto;
-    }
+  body .container {
+    margin: 1rem auto;
+  }
 
-    body .container .add-product #formTitle {
-        text-align: center;
-    }
+  body .container .add-product #formTitle {
+    text-align: center;
+  }
 
-    body .container .products .product {
-        width: 100%;
-        text-align: center;
-    }
+  body .container .products .product {
+    width: 100%;
+    text-align: center;
+  }
 
-    body .container .products {
-        width: 100%;
-    }
+  body .container .products {
+    width: 100%;
+  }
 }

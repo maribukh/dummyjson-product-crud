@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JSON Assignment</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="media.css">
+    <link rel="stylesheet" href="media.css" />
   </head>
+
   <body>
-    <div class="container">
+    <div class="form-overlay d-none">
       <div class="add-product">
-        <h2 id="formTitle"><b>Add Your Product</b></h2>
+        <div id="formTitle">
+          <b>Add Your Product</b> <span class="close">✖</span>
+        </div>
+
         <div class="input-container">
           <input type="text" placeholder="Title" />
           <input type="text" placeholder="Description" />
@@ -23,6 +27,32 @@
           <button id="addBtn">Add Product</button>
         </div>
       </div>
+      <div class="done d-none">
+        <img src="./check_8775810.png" alt="Success" />
+        <p>Product Added Successfully!</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="addForm">
+        <span>
+          Want <i><b>Add</b></i> Your Product?</span
+        >
+        <button id="showForm">Add</button>
+      </div>
+      <div class="actions">
+        <div class="search">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search..."
+          /><button onclick="handleSearch()">Search</button>
+        </div>
+        <div class="button-container">
+          <button onclick="inc()">Sort in ascending order</button>
+          <button onclick="dec()">Sort in descending order</button>
+        </div>
+      </div>
+
       <div class="products"></div>
     </div>
 

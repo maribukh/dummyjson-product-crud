@@ -4,28 +4,57 @@
   box-sizing: border-box;
 }
 
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.d-none {
+  display: none;
+  opacity: 0;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f9f9f9;
   color: #333;
 }
-body .container {
-  width: 80%;
-  margin: 5rem auto;
+body .form-overlay {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  width: 100%;
+  margin-top: 5rem;
 }
-body .container .add-product {
-  margin-bottom: 2rem;
+body .form-overlay .add-product {
+  z-index: 9999;
+  width: 30%;
+  margin: auto;
+  position: absolute;
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
-body .container .add-product #formTitle {
+body .form-overlay .add-product #formTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-body .container .add-product .input-container {
-  width: 30%;
+body .form-overlay .add-product #formTitle .close {
+  cursor: pointer;
+}
+body .form-overlay .add-product .input-container {
   display: flex;
   flex-direction: column;
 }
-body .container .add-product .input-container button {
+body .form-overlay .add-product .input-container button {
   width: 100%;
   padding: 0.5rem;
   border: none;
@@ -35,10 +64,11 @@ body .container .add-product .input-container button {
   cursor: pointer;
   transition: background 0.2s ease;
 }
-body .container .add-product .input-container button:hover {
+body .form-overlay .add-product .input-container button:hover {
   background-color: rgb(0, 98.4, 204);
+  cursor: pointer;
 }
-body .container .add-product .input-container input {
+body .form-overlay .add-product .input-container input {
   margin: 0.5rem 0;
   padding: 0.8rem;
   border-radius: 4px;
@@ -46,12 +76,130 @@ body .container .add-product .input-container input {
   outline: none;
   transition: border 0.2s ease;
 }
-body .container .add-product .input-container input:focus {
+body .form-overlay .add-product .input-container input:focus {
   border-color: #007bff;
+}
+body .form-overlay .done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+body .form-overlay .done img {
+  width: 30%;
+  height: auto;
+}
+body .form-overlay .done p {
+  font-size: 1.1rem;
+  color: #28a745;
+  font-weight: bold;
+  margin: 0;
+}
+body .form-overlay .done.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+body .container {
+  width: 80%;
+  margin: 5rem auto;
+  position: relative;
+}
+body .container .addForm {
+  margin-bottom: 2rem;
+}
+body .container .addForm button {
+  margin-left: 1rem;
+  width: 5%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+body .container .addForm button:hover {
+  background-color: rgb(0, 98.4, 204);
+  cursor: pointer;
+}
+body .container .actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+body .container .actions .search {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  position: relative;
+}
+body .container .actions .search input {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+body .container .actions .search input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+body .container .actions .search button {
+  position: absolute;
+  right: 0;
+  padding: 0.93rem 1.25rem;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  outline: none;
+  border: none;
+  background: linear-gradient(135deg, #007bff, #007bff);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+}
+body .container .actions .search button:hover {
+  background: linear-gradient(135deg, #4690e5, #304ba3);
+}
+body .container .actions .search button:active {
+  transform: scale(0.98);
+}
+body .container .actions .button-container {
+  display: flex;
+  gap: 1rem;
+}
+body .container .actions .button-container button {
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #007bff, #007bff);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(3, 8, 255, 0.2);
+}
+body .container .actions .button-container button:hover {
+  background: linear-gradient(135deg, #4690e5, #304ba3);
+  transform: translateY(-2px);
+}
+body .container .actions .button-container button:active {
+  transform: scale(0.98);
 }
 body .container .products {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -66,13 +214,31 @@ body .container .products .product {
   flex-direction: column;
   justify-content: space-between;
 }
-body .container .products .product h2 {
-  font-size: 1.2rem;
+body .container .products .product .title {
+  font-size: 1.2rem !important;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 body .container .products .product p {
   margin: 0.5rem 0;
   font-size: 0.9rem;
+}
+body .container .products .product .product-edit input,
+body .container .products .product .product-edit textarea {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  border: none;
+  outline: none;
+  height: fit-content;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  height: fit-content;
+  cursor: pointer;
+}
+body .container .products .product .product-edit input:focus,
+body .container .products .product .product-edit textarea:focus {
+  border: 1px solid #f9f9f9;
+  border-color: #007bff;
 }
 body .container .products .product .img {
   margin-bottom: 1rem;
@@ -98,6 +264,7 @@ body .container .products .product .button-container button {
 }
 body .container .products .product .button-container button:hover {
   background-color: rgb(0, 98.4, 204);
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,4 @@
 let products = [];
-
 let API_BASE = "https://dummyjson.com/products";
 
 async function fetchProducts() {
@@ -50,19 +49,75 @@ function productHTML(p) {
       <div class="img" style="background-image: url(${
         p.images?.[0] || ""
       })"></div>
-      <h2>${p.title}</h2>
-      <p>Description: ${p.description}</p>
-      <p>Category: ${p.category}</p>
-      <p>Price: ${p.price}</p>
-      <p>Discount: ${p.discountPercentage}</p>
-      <p>Rating: ${p.rating}</p>
-      <p>Stock: ${p.stock}</p>
+
+      <div class="product-view">
+        <h2 class="title">${p.title}</h2>
+        <p><b>Description:</b> ${p.description}</p>
+        <p><b>Category:</b> ${p.category}</p>
+        <p><b>Price:</b> ${p.price}$</p>
+        <p><b>Discount:</b> ${p.discountPercentage}$</p>
+        <p><b>Rating: </b>${p.rating}✨</p>
+        <p><b>Stock:</b> ${p.stock}</p>
+      </div>
+
+      <div class="product-edit d-none">
+        <input class="title" type="text" value="${
+          p.title
+        }" placeholder="Title" />
+        <textarea placeholder="Description" rows="4">${p.description}</textarea>
+        <input type="text" value="${p.category}" placeholder="Category" />
+        <input type="number" value="${p.price}" placeholder="Price" />
+        <input type="number" value="${
+          p.discountPercentage
+        }" placeholder="Discount" />
+        <input type="number" value="${p.rating}" placeholder="Rating" />
+        <input type="number" value="${p.stock}" placeholder="Stock" />
+      </div>
+
       <div class="button-container">
+        <button class="save-btn d-none">Save</button>
         <button class="delete-btn">Delete</button>
         <button class="edit-btn">Edit</button>
       </div>
     </div>`;
 }
+
+function showForm() {
+  let addBtn = document.getElementById("showForm");
+  let formOverlay = document.querySelector(".form-overlay");
+  let closeBtn = document.querySelector(".form-overlay .close");
+  let container = document.querySelector(".container");
+
+  if (!addBtn || !formOverlay || !closeBtn) return;
+
+  addBtn.addEventListener("click", () => {
+    formOverlay.classList.remove("d-none");
+    formOverlay.classList.add("fade-in");
+    container.classList.add("d-none");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    hideOverlay();
+
+    container.classList.remove("d-none");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !formOverlay.classList.contains("d-none")) {
+      hideOverlay();
+    }
+  });
+
+  function hideOverlay() {
+    formOverlay.classList.add("fade-out");
+    setTimeout(() => {
+      formOverlay.classList.remove("fade-in", "fade-out");
+      formOverlay.classList.add("d-none");
+    }, 300);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", showForm);
 
 function clearForm() {
   document
@@ -83,8 +138,39 @@ function getFormData() {
     discountPercentage: parseFloat(discount),
     rating: parseFloat(rating),
     stock: parseInt(stock),
-    imageUrl: imageUrl.trim(), 
+    imageUrl,
   };
+}
+
+function showSuccessMessage() {
+  let doneMsg = document.querySelector(".form-overlay .done");
+  let formOverlay = document.querySelector(".form-overlay");
+  let container = document.querySelector(".container");
+
+  if (!doneMsg || !formOverlay) return;
+
+  formOverlay.querySelector(".add-product").classList.add("d-none");
+
+  doneMsg.classList.remove("d-none");
+  setTimeout(() => {
+    doneMsg.classList.add("show");
+  }, 10);
+
+  setTimeout(() => {
+    doneMsg.classList.remove("show");
+
+    setTimeout(() => {
+      doneMsg.classList.add("d-none");
+      formOverlay.classList.add("fade-out");
+      container.classList.remove("d-none");
+
+      setTimeout(() => {
+        formOverlay.classList.remove("fade-in", "fade-out");
+        formOverlay.classList.add("d-none");
+        formOverlay.querySelector(".add-product").classList.remove("d-none");
+      }, 300);
+    }, 500);
+  }, 2000);
 }
 
 function setupForm() {
@@ -140,26 +226,27 @@ function setupForm() {
             ],
       });
 
-      if (newProduct) products.push(newProduct);
+      if (newProduct) {
+        products.push(newProduct);
+        showSuccessMessage();
+      }
     }
 
     clearForm();
     renderProducts(products);
   });
 
-  // Делегирование на кнопки Edit/Delete
-  document.querySelector(".products").addEventListener("click", (e) => {
+  document.querySelector(".products").addEventListener("click", async (e) => {
     let target = e.target;
-    if (
-      !target.classList.contains("edit-btn") &&
-      !target.classList.contains("delete-btn")
-    )
-      return;
-
     let card = target.closest(".product");
+    if (!card) return;
+
     let id = parseInt(card.dataset.id);
     let product = products.find((p) => p.id === id);
-    let inputs = document.querySelectorAll(".input-container input");
+    let view = card.querySelector(".product-view");
+    let edit = card.querySelector(".product-edit");
+    let saveBtn = card.querySelector(".save-btn");
+    let editBtn = card.querySelector(".edit-btn");
 
     if (target.classList.contains("delete-btn")) {
       products = products.filter((p) => p.id !== id);
@@ -168,24 +255,67 @@ function setupForm() {
     }
 
     if (target.classList.contains("edit-btn")) {
-      // Заполняем форму
-      [inputs[0].value, inputs[1].value, inputs[2].value] = [
-        product.title,
-        product.description,
-        product.category,
-      ];
-      inputs[3].value = product.price;
-      inputs[4].value = product.discountPercentage;
-      inputs[5].value = product.rating;
-      inputs[6].value = product.stock;
-      inputs[7].value = product.images?.[0] || "";
+      view.classList.add("fade-out");
+      setTimeout(() => {
+        view.classList.add("d-none");
+        edit.classList.remove("d-none");
+        saveBtn.classList.remove("d-none");
+        editBtn.classList.add("d-none");
+      }, 300);
+    }
 
-      isEditing = true;
-      editId = id;
-      addBtn.textContent = "Update Product";
-      formTitle.textContent = "Edit Product";
+    if (target.classList.contains("save-btn")) {
+      let inputs = edit.querySelectorAll("input");
+      let textarea = edit.querySelector("textarea");
+      let updatedData = {
+        title: inputs[0].value,
+        description: textarea.value,
+        category: inputs[1].value,
+        price: parseFloat(inputs[2].value),
+        discountPercentage: parseFloat(inputs[3].value),
+        rating: parseFloat(inputs[4].value),
+        stock: parseInt(inputs[5].value),
+      };
+
+      let updated = await updateProduct(id, updatedData);
+      if (updated) {
+        let index = products.findIndex((p) => p.id === id);
+        products[index] = { ...products[index], ...updated };
+        renderProducts(products);
+      }
     }
   });
+}
+
+// inc and dec
+
+function inc() {
+  let sorted = [...products].sort((a, b) => a.price - b.price);
+  renderProducts(sorted);
+}
+
+function dec() {
+  let sorted = [...products].sort((a, b) => b.price - a.price);
+  renderProducts(sorted);
+}
+
+// search functional
+
+async function handleSearch() {
+  let query = document.getElementById("searchInput").value.trim();
+
+  if (!query) {
+    renderProducts(products);
+    return;
+  }
+
+  try {
+    let res = await fetch(`https://dummyjson.com/products/search?q=${query}`);
+    let data = await res.json();
+    renderProducts(data.products);
+  } catch (error) {
+    console.error("Search error:", error);
+  }
 }
 
 async function main() {
